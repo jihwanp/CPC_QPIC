@@ -1,7 +1,6 @@
-# CPC
-Official PyTorch Implementation for CVPR2022 paper "Consistency Learning via Decoding Path Augmentation for Transformers in Human Object Interaction Detection"
+# CPC_QPIC
 
-This repository contains the application of CPC at [QPIC](https://arxiv.org/abs/2103.05399). This is based on the official implementation of QPIC in [here](https://github.com/hitachi-rd-cv/qpic).
+This repository contains the application of CPC at [QPIC](https://arxiv.org/abs/2103.05399), based on the official implementation of QPIC in [here](https://github.com/hitachi-rd-cv/qpic).
 
 <div align="center">
   <img src=".github/mainfig.png" width="900px" />
@@ -130,7 +129,6 @@ python generate_vcoco_official.py \
         --hoi_path data/v-coco
 ```
 ## Citation
-Please consider citing our paper if it helps your research.
 ```
 @inproceedings{park2022consistency,
   title={Consistency Learning via Decoding Path Augmentation for Transformers in Human Object Interaction Detection},

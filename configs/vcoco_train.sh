@@ -16,7 +16,8 @@ python -u main.py \
     --batch_size 2 \
     --lr_backbone 1e-5 \
     --ramp_up_epoch 30 \
-    --hoi_consistency_loss_coef 0.2 \
+    --ramp_down_epoch 50 \
+    --hoi_consistency_loss_coef 0.1 \
     --path_id 0 \
     --dataset_file vcoco \
     --hoi_path data/v-coco \
@@ -25,7 +26,7 @@ python -u main.py \
     --backbone resnet50 \
     --reg_consistency_loss_coef 2.5 \
     --obj_consistency_loss_coef 1 \
-    --verb_consistency_loss_coef 1 \
+    --verb_consistency_loss_coef 2 \
     --output_dir checkpoints/vcoco/ \
     --augpath_name [\'p2\',\'p3\',\'p4\'] \
     ${PY_ARGS}

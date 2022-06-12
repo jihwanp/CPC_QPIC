@@ -1,5 +1,4 @@
-# CPC
-Official PyTorch Implementation for CVPR2022 paper "Consistency Learning via Decoding Path Augmentation for Transformers in Human Object Interaction Detection"
+# CPC_QPIC
 
 This repository contains the application of CPC at [QPIC](https://arxiv.org/abs/2103.05399). This is based on the official implementation of QPIC in [here](https://github.com/hitachi-rd-cv/qpic).
 

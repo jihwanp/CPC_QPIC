@@ -122,8 +122,8 @@ python main.py \
 VCOCO
 ```
 python generate_vcoco_official.py \
-        --param_path checkpoints/hicodet/logs/qpic_cpc_resnet50_vcoco.pth \
-        --save_path vcoco.pickle \
+        --param_path checkpoints/vcoco/logs/qpic_cpc_resnet50_vcoco.pth \
+        --save_path checkpoints/vcoco/logs/vcoco.pickle \
         --share_dec_param \ 
         --path_id 0 \
         --hoi_path data/v-coco

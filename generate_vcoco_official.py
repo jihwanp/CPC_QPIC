@@ -320,7 +320,7 @@ def main(args):
     post_processor.to(device)
 
     checkpoint = torch.load(args.param_path, map_location='cpu')
-    model.load_state_dict(checkpoint['model'])
+    model.load_state_dict(checkpoint['model'],strict=False)
 
     detections = generate(model, post_processor, data_loader_val, device, verb_classes, args.missing_category_id,args.path_id)
     

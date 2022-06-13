@@ -77,7 +77,7 @@ class DETRHOI(nn.Module):
             self.obj_bbox_embed_OItoH = MLP(hidden_dim, hidden_dim, 4, 3)
 
         self.aux_loss = aux_loss
-
+        self.stop_grad_stage = args.stop_grad_stage
     def forward(self, samples: NestedTensor):
         
         outputs_obj_class,outputs_verb_class,outputs_sub_coord,outputs_obj_coord= [],[],[],[]
@@ -106,7 +106,8 @@ class DETRHOI(nn.Module):
             outputs_sub_coord.append(self.sub_bbox_embed_HOtoI(hs_HOtoI).sigmoid())
             outputs_obj_coord.append(self.obj_bbox_embed_HOtoI(hs_HOtoI).sigmoid())
             outputs_obj_class.append(self.obj_class_embed_HOtoI(hs_HOtoI))
-            hs2_HOtoI=self.HOtoI_2decoder(hs_HOtoI.transpose(1,2)[-1], memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_HOtoI2.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2) 
+            tgt_HOtoI = hs_HOtoI.transpose(1,2)[-1] if not self.stop_grad_stage else hs_HOtoI.clone().detach().transpose(1,2)[-1]
+            hs2_HOtoI=self.HOtoI_2decoder(tgt_HOtoI, memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_HOtoI2.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2) 
             outputs_verb_class.append(self.verb_class_embed_HOtoI(hs2_HOtoI))
 
         if 'p3' in self.aug_paths:
@@ -114,7 +115,8 @@ class DETRHOI(nn.Module):
             hs_HItoO=self.HItoO_1decoder(tgt_3, memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_HItoO.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2)
             outputs_verb_class.append(self.verb_class_embed_HItoO(hs_HItoO))
             outputs_sub_coord.append(self.sub_bbox_embed_HItoO(hs_HItoO).sigmoid())
-            hs2_HItoO=self.HItoO_2decoder(hs_HItoO.transpose(1,2)[-1], memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_HItoO2.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2) 
+            tgt_HItoO = hs_HItoO.transpose(1,2)[-1] if not self.stop_grad_stage else hs_HItoO.clone().detach().transpose(1,2)[-1]
+            hs2_HItoO=self.HItoO_2decoder(tgt_HItoO, memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_HItoO2.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2) 
             outputs_obj_class.append(self.obj_class_embed_HItoO(hs2_HItoO))
             outputs_obj_coord.append(self.obj_bbox_embed_HItoO(hs2_HItoO).sigmoid())
         
@@ -124,7 +126,8 @@ class DETRHOI(nn.Module):
             outputs_obj_class.append(self.obj_class_embed_OItoH(hs_OItoH))
             outputs_verb_class.append(self.verb_class_embed_OItoH(hs_OItoH))
             outputs_obj_coord.append(self.obj_bbox_embed_OItoH(hs_OItoH).sigmoid())
-            hs2_OItoH=self.OItoH_2decoder(hs_OItoH.transpose(1,2)[-1], memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_OItoH2.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2) 
+            tgt_OItoH = hs_OItoH.transpose(1,2)[-1] if not self.stop_grad_stage else hs_OItoH.clone().detach().transpose(1,2)[-1]
+            hs2_OItoH=self.OItoH_2decoder(tgt_OItoH, memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_OItoH2.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2) 
             outputs_sub_coord.append(self.sub_bbox_embed_OItoH(hs2_OItoH).sigmoid())
         
         outputs_obj_class=torch.stack(outputs_obj_class,dim=2) #(dec_l,bs,num_path,q,num_obj_class)

@@ -82,10 +82,9 @@ def get_args_parser():
     # CPC
     parser.add_argument('--use_consis',action='store_true',help='use consistency regularization')
     parser.add_argument('--share_dec_param',action='store_true',help = 'share decoder parameters of all stages')
-    # parser.add_argument("--augpath_name", nargs="+", type=str,default=[],
-    #                     help='choose which augmented inference paths to use. (p2:x->HO->I,p3:x->HI->O,p4:x->OI->H)')
     parser.add_argument("--augpath_name", type=utils.arg_as_list,default=[],
                         help='choose which augmented inference paths to use. (p2:x->HO->I,p3:x->HI->O,p4:x->OI->H)')                       
+    parser.add_argument('--stop_grad_stage',action='store_true',help='Do not back propogate loss to previous stage')
 
     # Loss
     parser.add_argument('--no_aux_loss', dest='aux_loss', action='store_false',

@@ -10,14 +10,16 @@ python -u main.py \
     --run_name ${EXP_DIR} \
     --pretrained params/detr-r50-pre-vcoco-cpc.pth \
     --hoi \
+    --use_consis \
+    --share_dec_param \
+    --stop_grad_stage \
     --epochs 80 \
-    --lr_drop 60 \
+    --lr_drop 50 \
     --lr 1e-4 \
     --batch_size 2 \
     --lr_backbone 1e-5 \
     --ramp_up_epoch 30 \
-    --ramp_down_epoch 50 \
-    --hoi_consistency_loss_coef 0.1 \
+    --hoi_consistency_loss_coef 0.2 \
     --path_id 0 \
     --dataset_file vcoco \
     --hoi_path data/v-coco \

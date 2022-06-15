@@ -11,9 +11,12 @@ python -u main.py \
     --project_name CPC_QPIC_HICODET \
     --hoi \
     --epochs 80 \
-    --lr_drop 60 \
+    --lr_drop 50 \
+    --use_consis \
+    --share_dec_param \
+    --stop_grad_stage \
     --ramp_up_epoch 30 \
-    --hoi_consistency_loss_coef 0.1 \
+    --hoi_consistency_loss_coef 0.2 \
     --path_id 0 \
     --augpath_name [\'p2\',\'p3\',\'p4\'] \
     --dataset_file hico \

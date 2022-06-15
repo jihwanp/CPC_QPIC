@@ -100,6 +100,7 @@ class DETRHOI(nn.Module):
             pos_aug = pos[-1].flatten(2).permute(2, 0, 1)
             mask_aug = mask.flatten(1)
 
+        # P2 (x->HO->I)
         if 'p2' in self.aug_paths:
             tgt_2 = torch.zeros_like(self.query_embed_HOtoI.weight.unsqueeze(1).repeat(1, bs, 1))
             hs_HOtoI=self.HOtoI_1decoder(tgt_2, memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_HOtoI.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2)
@@ -110,6 +111,7 @@ class DETRHOI(nn.Module):
             hs2_HOtoI=self.HOtoI_2decoder(tgt_HOtoI, memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_HOtoI2.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2) 
             outputs_verb_class.append(self.verb_class_embed_HOtoI(hs2_HOtoI))
 
+        # P4 (x->HI->O)
         if 'p3' in self.aug_paths:
             tgt_3 = torch.zeros_like(self.query_embed_HItoO.weight.unsqueeze(1).repeat(1, bs, 1))
             hs_HItoO=self.HItoO_1decoder(tgt_3, memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_HItoO.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2)
@@ -119,7 +121,7 @@ class DETRHOI(nn.Module):
             hs2_HItoO=self.HItoO_2decoder(tgt_HItoO, memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_HItoO2.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2) 
             outputs_obj_class.append(self.obj_class_embed_HItoO(hs2_HItoO))
             outputs_obj_coord.append(self.obj_bbox_embed_HItoO(hs2_HItoO).sigmoid())
-        
+        # P4 (x->OI->H)
         if 'p4' in self.aug_paths:
             tgt_4 = torch.zeros_like(self.query_embed_OItoH.weight.unsqueeze(1).repeat(1, bs, 1))
             hs_OItoH=self.OItoH_1decoder(tgt_4, memory, memory_key_padding_mask=mask_aug, pos=pos_aug, query_pos=self.query_embed_OItoH.weight.unsqueeze(1).repeat(1, bs, 1)).transpose(1,2)
